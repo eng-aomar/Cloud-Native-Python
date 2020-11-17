@@ -23,25 +23,22 @@ def home_index():
     return jsonify({'api_version':api_list}),200
 
 
-@app.route('/api/v1/users', methods=['GET'])
+@app.route('/api/v1/users')
 def get_users():
-    return list_users()     
-
-def list_users():
     conn = sqlite3.connect('mydb.db')
     print("Opened database successfully")
     api_list = []
     cursor = conn.execute("SELECT * from users")
     for row in cursor:
-        a_dict = {}
-        a_dict['username'] = row[0]
-        a_dict['emailid'] = row[1]
-        a_dict['password'] = row[2]
-        a_dict['full_name'] = row[3]
-        a_dict['id'] = row[4]
-        api_list.append(a_dict)
+        user = {}
+        user['username'] =row[0]
+        user['name'] = row[1]
+        user['email'] = row[2]
+        user['password'] = row[3]
+        user['id'] = row[4]
+        api_list.append(user)
     conn.close()
-    return jsonify({'user_list': api_list})
+    return jsonify({'user_list': api_list}), 200
 
 
 @app.route('/api/v1/users/<int:user_id>', methods=['GET'])
